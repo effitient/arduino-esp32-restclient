@@ -101,6 +101,7 @@ void RestClient::writeBody(const char *body)
 int RestClient::request(const char *method, const char *path, const char *body)
 {
     int statusCode = -1;
+    client_s.setInsecure();
     if (!client_s.connect(host, port))
     {
         DEBUG_PRINT("[Connection failed]\n");
