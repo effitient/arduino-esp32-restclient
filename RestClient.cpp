@@ -11,20 +11,17 @@
 
 const char *contentType = "text/plain";
 
-RestClient::RestClient(const char *_host, const int _port)
-{
+RestClient::RestClient(const char *_host, const int _port) {
     port = _port;
     host = _host;
     num_headers = 0;
 }
 
-int RestClient::begin(const char *ssid, const char *pass)
-{
+int RestClient::begin(const char *ssid, const char *pass) {
     WiFi.mode(WIFI_MODE_STA);
     WiFi.begin(ssid, pass);
     DEBUG_PRINT("\n[Connecting] [");
-    while (WiFi.status() != WL_CONNECTED)
-    {
+    while (WiFi.status() != WL_CONNECTED) {
         delay(500);
         DEBUG_PRINT("-");
     }
@@ -39,13 +36,11 @@ int RestClient::begin(const char *ssid, const char *pass)
     return WiFi.status();
 }
 
-int RestClient::get(const char *path, const bool insecure)
-{
+int RestClient::get(const char *path, const bool insecure) {
     return request("GET", path, NULL, insecure);
 }
 
-int RestClient::post(const char *path, const char *body, const bool insecure)
-{
+int RestClient::post(const char *path, const char *body, const bool insecure) {
     return request("POST", path, body, insecure);
 }
 
@@ -53,36 +48,29 @@ void RestClient::setTimeout(const int seconds) {
     client_s.setTimeout(seconds);
 }
 
-void RestClient::setHeader(const char *header)
-{
+void RestClient::setHeader(const char *header) {
     headers[num_headers] = header;
     num_headers++;
 }
 
-void RestClient::setContentType(const char *contentTypeValue)
-{
+void RestClient::setContentType(const char *contentTypeValue) {
     contentType = contentTypeValue;
 }
 
-void RestClient::write(const char *string)
-{
+void RestClient::write(const char *string) {
     DEBUG_PRINT(string);
     client_s.print(string);
 }
 
-void RestClient::writeHeaders()
-{
-    for (int i = 0; i < num_headers; i++)
-    {
+void RestClient::writeHeaders() {
+    for (int i = 0; i < num_headers; i++) {
         write(headers[i]);
         write("\r\n");
     }
 }
 
-void RestClient::writeBody(const char *body)
-{
-    if (body != NULL)
-    {
+void RestClient::writeBody(const char *body) {
+    if (body != NULL) {
         char contentLength[30];
         sprintf(contentLength, "Content-Length: %d\r\n", strlen(body));
         write(contentLength);
@@ -94,22 +82,19 @@ void RestClient::writeBody(const char *body)
 
     write("\r\n");
 
-    if (body != NULL)
-    {
+    if (body != NULL) {
         write(body);
         write("\r\n");
         write("\r\n");
     }
 }
 
-int RestClient::request(const char *method, const char *path, const char *body, bool insecure)
-{
+int RestClient::request(const char *method, const char *path, const char *body, bool insecure) {
     int statusCode = -1;
     if (insecure) {
         client_s.setInsecure();
     }
-    if (!client_s.connect(host, port))
-    {
+    if (!client_s.connect(host, port)) {
         DEBUG_PRINT("[Connection failed]\n");
         return 0;
     }
@@ -141,8 +126,7 @@ int RestClient::request(const char *method, const char *path, const char *body, 
     return statusCode;
 }
 
-int RestClient::getResponseStatus()
-{
+int RestClient::getResponseStatus() {
     int code = 0;
 
     if (client_s.connected()) {

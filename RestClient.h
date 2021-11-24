@@ -2,8 +2,7 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 
-class RestClient
-{
+class RestClient {
 public:
     RestClient(const char *host, const int port);
     int begin(const char *ssid, const char *pass);
