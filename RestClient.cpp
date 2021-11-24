@@ -39,17 +39,17 @@ int RestClient::begin(const char *ssid, const char *pass)
     return WiFi.status();
 }
 
-int RestClient::get(const char *path)
+int RestClient::get(const char *path, const bool insecure)
 {
-    return request("GET", path, NULL);
+    return request("GET", path, NULL, insecure);
 }
 
-int RestClient::post(const char *path, const char *body)
+int RestClient::post(const char *path, const char *body, const bool insecure)
 {
-    return request("POST", path, body);
+    return request("POST", path, body, insecure);
 }
 
-void RestClient::setTimeout(int seconds) {
+void RestClient::setTimeout(const int seconds) {
     client_s.setTimeout(seconds);
 }
 
@@ -102,10 +102,12 @@ void RestClient::writeBody(const char *body)
     }
 }
 
-int RestClient::request(const char *method, const char *path, const char *body)
+int RestClient::request(const char *method, const char *path, const char *body, bool insecure)
 {
     int statusCode = -1;
-    client_s.setInsecure();
+    if (insecure) {
+        client_s.setInsecure();
+    }
     if (!client_s.connect(host, port))
     {
         DEBUG_PRINT("[Connection failed]\n");

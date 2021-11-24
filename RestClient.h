@@ -8,10 +8,10 @@ public:
     RestClient(const char *host, const int port);
     int begin(const char *ssid, const char *pass);
 
-    int get(const char *path);
-    int post(const char *path, const char *body);
+    int get(const char *path, const bool insecure);
+    int post(const char *path, const char *body, const bool insecure);
 
-    void setTimeout(int seconds);
+    void setTimeout(const int seconds);
     void setHeader(const char *header);
     void setContentType(const char *contentTypeValue);
     void write(const char *string);
