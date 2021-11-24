@@ -7,7 +7,6 @@ class RestClient
 public:
     RestClient(const char *host, const int port);
     int begin(const char *ssid, const char *pass);
-    IPAddress getIpAddress();
 
     int get(const char *path);
     int post(const char *path, const char *body);
@@ -17,7 +16,7 @@ public:
     void setContentType(const char *contentTypeValue);
     void write(const char *string);
     int request(const char *method, const char *path, const char *body);
-    int readResponse();
+    int getResponseStatus();
 
 private:
     int port;

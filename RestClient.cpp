@@ -129,9 +129,9 @@ int RestClient::request(const char *method, const char *path, const char *body)
     writeBody(body);
 
     DEBUG_PRINT("][End Request]\n");
-    DEBUG_PRINT("[Reading Response]\n");
-    statusCode = readResponse();
-    DEBUG_PRINT("[End Read Response]\n");
+    DEBUG_PRINT("[Reading Response Status]\n");
+    statusCode = getResponseStatus();
+    DEBUG_PRINT("[End Read Response Status]\n");
     DEBUG_PRINT("[Stoping client]\n");
     num_headers = 0;
     client_s.stop();
@@ -139,36 +139,17 @@ int RestClient::request(const char *method, const char *path, const char *body)
     return statusCode;
 }
 
-int RestClient::readResponse()
+int RestClient::getResponseStatus()
 {
-    boolean inStatus = false;
-    char statusCode[4];
-    int i = 0;
     int code = 0;
 
-    while (client_s.connected() && client_s.available())
-    {
-        if (client_s.available())
-        {
-            char c = client_s.read();
-            DEBUG_PRINT(c);
-
-            if (c == ' ' && !inStatus)
-            {
-                inStatus = true;
-            }
-
-            if (inStatus && i < 3 && c != ' ')
-            {
-                statusCode[i] = c;
-                i++;
-            }
-            if (i == 3)
-            {
-                statusCode[i] = '\0';
-                code = atoi(statusCode);
-            }
-        }
+    if (client_s.connected()) {
+        String headerLine = client_s.readStringUntil('\n');
+        int indexFirstBlank = headerLine.indexOf(' ');
+        int indexSecondBlank = headerLine.indexOf(' ', indexFirstBlank + 1);
+        String statusCode = headerLine.substring(indexFirstBlank + 1, indexSecondBlank);
+        DEBUG_PRINT(statusCode);
+        code = statusCode.toInt();
     }
     return code;
 }
