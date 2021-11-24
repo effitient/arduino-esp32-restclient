@@ -14,7 +14,7 @@ public:
     void setHeader(const char *header);
     void setContentType(const char *contentTypeValue);
     void write(const char *string);
-    int request(const char *method, const char *path, const char *body);
+    int request(const char *method, const char *path, const char *body, const bool insecure);
     int getResponseStatus();
 
 private:

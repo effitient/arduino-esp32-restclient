@@ -89,7 +89,7 @@ void RestClient::writeBody(const char *body) {
     }
 }
 
-int RestClient::request(const char *method, const char *path, const char *body, bool insecure) {
+int RestClient::request(const char *method, const char *path, const char *body, const bool insecure) {
     int statusCode = -1;
     if (insecure) {
         client_s.setInsecure();
