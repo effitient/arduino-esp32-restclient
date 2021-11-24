@@ -8,7 +8,6 @@
 #else
 #define DEBUG_PRINT(x)
 #endif
-//TODO: Add Timeout to send and read requests
 
 const char *contentType = "text/plain";
 
@@ -21,6 +20,7 @@ RestClient::RestClient(const char *_host, const int _port)
 
 int RestClient::begin(const char *ssid, const char *pass)
 {
+    WiFi.mode(WIFI_MODE_STA);
     WiFi.begin(ssid, pass);
     DEBUG_PRINT("\n[Connecting] [");
     while (WiFi.status() != WL_CONNECTED)
@@ -47,6 +47,10 @@ int RestClient::get(const char *path)
 int RestClient::post(const char *path, const char *body)
 {
     return request("POST", path, body);
+}
+
+void RestClient::setTimeout(int seconds) {
+    client_s.setTimeout(seconds);
 }
 
 void RestClient::setHeader(const char *header)
@@ -125,14 +129,12 @@ int RestClient::request(const char *method, const char *path, const char *body)
     writeBody(body);
 
     DEBUG_PRINT("][End Request]\n");
-    delay(100);
     DEBUG_PRINT("[Reading Response]\n");
     statusCode = readResponse();
     DEBUG_PRINT("[End Read Response]\n");
     DEBUG_PRINT("[Stoping client]\n");
     num_headers = 0;
     client_s.stop();
-    delay(50);
     DEBUG_PRINT("[Client stopped]\n");
     return statusCode;
 }

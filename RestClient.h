@@ -9,9 +9,10 @@ public:
     int begin(const char *ssid, const char *pass);
     IPAddress getIpAddress();
 
-    int get(const char *);
+    int get(const char *path);
     int post(const char *path, const char *body);
 
+    void setTimeout(int seconds);
     void setHeader(const char *header);
     void setContentType(const char *contentTypeValue);
     void write(const char *string);
